@@ -77,7 +77,7 @@ storiesOf("DayList", module)
 
   storiesOf("InterviewerListItem", module)
     .addParameters({
-      backgrounds: [{ name: "dark", value: "222f3e", default: true }]
+      backgrounds: [{ name: "dark", value: "#222f3e", default: true }]
     })
     .add("Unselected", () => (
       <InterviewerListItem
