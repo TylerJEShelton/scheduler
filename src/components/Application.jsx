@@ -4,45 +4,7 @@ import axios from "axios";
 import "components/Application.scss";
 import DayList from "./DayList";
 import Appointment from "./Appointment/index.jsx";
-
-const appointments = {
-  "1": {
-    id: 1,
-    time: "12pm",
-  },
-  "2": {
-    id: 2,
-    time: "1pm",
-    interview: {
-      student: "Lydia Miller-Jones",
-      interviewer:{
-        id: 3,
-        name: "Sylvia Palmer",
-        avatar: "https://i.imgur.com/LpaY82x.png",
-      }
-    }
-  },
-  "3": {
-    id: 3,
-    time: "2pm",
-  },
-  "4": {
-    id: 4,
-    time: "3pm",
-    interview: {
-      student: "Archie Andrews",
-      interviewer:{
-        id: 4,
-        name: "Cohana Roy",
-        avatar: "https://i.imgur.com/FK8V841.jpg",
-      }
-    }
-  },
-  "5": {
-    id: 5,
-    time: "4pm",
-  }
-};
+import { getAppointmentsForDay } from "helpers/selectors";
 
 export default function Application(props) {
   const [state, setState] = useState({
@@ -52,19 +14,21 @@ export default function Application(props) {
   });
   
   const setDay = day => setState({...state, day});
-  const setDays = days => setState(prev => ({...prev, days}));
-
-
+  
   useEffect(() => {
-    const url = `/api/days`;
-    axios.get(url)
-      .then(response => {
-        console.log(response.data);
-        setDays(response.data)
-      });
+    const daysURL = `/api/days`;
+    const appointmentsURL = `/api/appointments`;
+
+    Promise.all([
+      Promise.resolve(axios.get(daysURL)),
+      Promise.resolve(axios.get(appointmentsURL)),
+    ]).then((all) => {
+      setState(prev => ({...prev, days: all[0].data, appointments: all[1].data}))
+    });
   }, []);
 
-  const displayedAppointments = Object.values(appointments).map((appointment) => {
+  const dailyAppointments = getAppointmentsForDay(state, state.day);
+  const displayedAppointments = dailyAppointments.map((appointment) => {
     return(
       <Appointment
         key={appointment.id}
@@ -72,7 +36,7 @@ export default function Application(props) {
       />
     );
   });
-
+  
   return (
     <main className="layout">
       <section className="sidebar">

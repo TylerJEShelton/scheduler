@@ -17,6 +17,6 @@ export function getAppointmentsForDay(state, day) {
   currentDayAppointments.forEach(appointmentID => {
     appointments.push(state.appointments[appointmentID]);
   });
-
+  
   return appointments;
 }
