@@ -6,6 +6,11 @@ import DayList from "./DayList";
 import Appointment from "./Appointment/index.jsx";
 import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors";
 
+// API link constants
+const daysURL = `/api/days`;
+const appointmentsURL = `/api/appointments`;
+const interviewersURL = `/api/interviewers`;
+
 export default function Application(props) {
   const [state, setState] = useState({
     day: "Monday",
@@ -17,10 +22,6 @@ export default function Application(props) {
   const setDay = day => setState({...state, day});
   
   useEffect(() => {
-    const daysURL = `/api/days`;
-    const appointmentsURL = `/api/appointments`;
-    const interviewersURL = `/api/interviewers`;
-
     Promise.all([
       Promise.resolve(axios.get(daysURL)),
       Promise.resolve(axios.get(appointmentsURL)),
@@ -36,7 +37,21 @@ export default function Application(props) {
   }, []);
 
   function bookInterview(id, interview) {
-    console.log(id, interview);
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview }
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    return axios.put(`${appointmentsURL}/${id}`, {interview})
+    .then(() => {
+      setState({
+        ...state,
+        appointments
+      });
+    });      
   }
 
   const dailyAppointments = getAppointmentsForDay(state, state.day);
@@ -53,8 +68,7 @@ export default function Application(props) {
         bookInterview={bookInterview}
       />
     );
-  });
-  
+  });  
   
   return (
     <main className="layout">
