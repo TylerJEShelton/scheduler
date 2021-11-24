@@ -34,6 +34,9 @@ export default function useApplicationData() {
 
 
   function bookInterview(id, interview) {
+    let spots = 0;
+    let dayID = 0;
+    let appointmentIDs = [];
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
@@ -42,16 +45,35 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     };
+    
     return axios.put(`${appointmentsURL}/${id}`, {interview})
     .then(() => {
+      for (const day of state.days) {
+        if (day.appointments.includes(id)){
+          dayID = day.id;
+          appointmentIDs = day.appointments;  
+        }
+      }
+      appointmentIDs.forEach(appointmentID => {
+        if (!appointments[appointmentID].interview) {
+          spots++;
+        }
+      });
+      const day = {...state.days[dayID - 1], spots: spots};
+      const days = [...state.days];
+      days[dayID - 1] = day;
       setState({
         ...state,
-        appointments
+        appointments,
+        days
       });
     });      
   }
 
   function cancelInterview(id) {
+    let spots = 0;
+    let dayID = 0;
+    let appointmentIDs = [];
     const appointment = {
       ...state.appointments[id],
       interview: null
@@ -62,9 +84,24 @@ export default function useApplicationData() {
     };
     return axios.delete(`${appointmentsURL}/${id}`, appointment)
       .then(() => {
+        for (const day of state.days) {
+          if (day.appointments.includes(id)){
+            dayID = day.id;
+            appointmentIDs = day.appointments;  
+          }
+        }
+        appointmentIDs.forEach(appointmentID => {
+          if (!appointments[appointmentID].interview) {
+            spots++;
+          }
+        });
+        const day = {...state.days[dayID - 1], spots: spots};
+        const days = [...state.days];
+        days[dayID - 1] = day;
         setState({
           ...state,
-          appointments
+          appointments,
+          days
         });
       });
   }
