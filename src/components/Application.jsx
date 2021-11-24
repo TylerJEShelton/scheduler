@@ -7,7 +7,7 @@ import Appointment from "./Appointment/index.jsx";
 import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors";
 
 // API link constants
-const daysURL = `/api/days`;
+const daysURL = `api/days`;
 const appointmentsURL = `/api/appointments`;
 const interviewersURL = `/api/interviewers`;
 
