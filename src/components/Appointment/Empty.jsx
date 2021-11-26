@@ -1,5 +1,6 @@
 import React from "react";
 
+// Returns an img that displays a + symbol that will be used when the appointment slot is empty
 export default function Empty(props) {
   return(
     <main className="appointment__add">
