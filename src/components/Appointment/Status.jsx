@@ -1,5 +1,6 @@
 import React from "react";
 
+// Return a loading screen when saving or deleting an appointment
 export default function Status(props) {
   return(
     <main className="appointment__card appointment__card--status">
