@@ -3,6 +3,7 @@ import React from "react";
 import "components/InterviewerList.scss";
 import InterviewerListItem from "./InterviewerListItem";
 
+// Returns an InterviewerListItem component for each interviewer in the props.interviewers array
 export default function InterviewerList (props) {
   const displayInterviewers = props.interviewers.map((interviewer) => {
     return(
