@@ -3,15 +3,18 @@ import React, { useState } from "react";
 import InterviewerList from "components/InterviewerList";
 import Button from "components/Button";
 
+// Returns a form that allows a user to enter a name and select an interviewer from the InterviewerList component.  Once complete, the user can cancel to return to the previous screen or complete and set the appointment
 export default function Form(props) {
   const [student, setStudent] = useState(props.student || "");
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
 
+  // resets the form information when cancel is clicked
   const reset = () => {
     setStudent("");
     setInterviewer(null);  
   };
 
+  // runs the reset function and returns to the previous mode
   const cancel = () => {
     reset();
     props.onCancel();
