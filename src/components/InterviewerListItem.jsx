@@ -3,6 +3,7 @@ import classNames from "classnames";
 
 import "components/InterviewerListItem.scss";
 
+// Returns the interviewers avatar and if the interviewer is selected, it also displays their name
 export default function InterviewerListItem (props) {
   let interviewerListItemClass = classNames("interviewers__item", {"interviewers__item--selected": props.selected})
 
