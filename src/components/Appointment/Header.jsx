@@ -1,5 +1,6 @@
 import React from "react";
 
+// Returns the time of the appointment and the appointment separator
 export default function Header(props) {
   return(
     <header className="appointment__time">
