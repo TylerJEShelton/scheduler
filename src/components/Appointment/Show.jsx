@@ -1,5 +1,6 @@
 import React from "react";
 
+// Return the students and interviewers name from props and when it is hovered the edit and delete buttons are shown
 export default function Show(props) {
   return(
     <main className="appointment__card appointment__card--show">
