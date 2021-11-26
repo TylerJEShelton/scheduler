@@ -2,6 +2,7 @@ import React from "react";
 
 import "components/Appointment/styles.scss";
 
+// import custom components
 import Header from "./Header";
 import Show from "./Show";
 import Empty from "./Empty";
@@ -10,8 +11,10 @@ import Status from "./Status";
 import Confirm from "./Confirm";
 import Error from "./Error";
 
+// import custom hooks
 import useVisualMode from "hooks/useVisualMode";
 
+// global mode constants
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
 const CREATE = "CREATE";
@@ -22,17 +25,22 @@ const EDIT = "EDIT";
 const ERROR_SAVE = "ERROR_SAVE";
 const ERROR_DELETE = "ERROR_DELETE";
 
+// Returns the appropriate appointment based on the current mode
 export default function Appointment(props) {
+  // set up the custom hook to track the current mode
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
   );
 
+  // saves the appointment
   function save(name, interviewer) {
     const interview = {
       student: name,
       interviewer
     };
+    // show status when saving the appointment
     transition(SAVING);
+    // transition to the Show component on a successful save or to the Error component if there is an error while saving
     props.bookInterview(props.id, interview)
       .then(() => {
         transition(SHOW);
@@ -42,8 +50,11 @@ export default function Appointment(props) {
       });
   }
 
+  // deletes the appointment
   function deleteAppointment() {
+    // show status component when deleting an appointment
     transition(DELETING, true);
+    // transition to the Empty component on a successful deletion or to the Error component if there is an error while deleting
     props.cancelInterview(props.id)
       .then(() => {
         transition(EMPTY);
