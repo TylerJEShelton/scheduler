@@ -7,11 +7,14 @@ import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "help
 
 import useApplicationData from "hooks/useApplicationData";
 
+// Application returns the DayList component with all the days in the sidebar and displays all of the Appointments for the currently selected day
 export default function Application(props) {
   const {state, setDay, bookInterview, cancelInterview } = useApplicationData();
   
   const dailyAppointments = getAppointmentsForDay(state, state.day);
   const dailyInterviewers = getInterviewersForDay(state, state.day);
+  
+  // returns an Appointment componenet for each appointment in the dailyAppointments array
   const schedule = dailyAppointments.map((appointment) => {
     return(
       <Appointment
