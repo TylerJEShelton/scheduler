@@ -1,29 +1,29 @@
-import React from "react";
+import React from 'react';
 
-import "components/Appointment/styles.scss";
+import 'components/Appointment/styles.scss';
 
 // import custom components
-import Header from "./Header";
-import Show from "./Show";
-import Empty from "./Empty";
-import Form from "./Form";
-import Status from "./Status";
-import Confirm from "./Confirm";
-import Error from "./Error";
+import Header from './Header';
+import Show from './Show';
+import Empty from './Empty';
+import Form from './Form';
+import Status from './Status';
+import Confirm from './Confirm';
+import Error from './Error';
 
 // import custom hooks
-import useVisualMode from "hooks/useVisualMode";
+import useVisualMode from 'hooks/useVisualMode';
 
 // global mode constants
-const EMPTY = "EMPTY";
-const SHOW = "SHOW";
-const CREATE = "CREATE";
-const SAVING = "SAVING";
-const CONFIRM = "CONFIRM";
-const DELETING = "DELETING";
-const EDIT = "EDIT";
-const ERROR_SAVE = "ERROR_SAVE";
-const ERROR_DELETE = "ERROR_DELETE";
+const EMPTY = 'EMPTY';
+const SHOW = 'SHOW';
+const CREATE = 'CREATE';
+const SAVING = 'SAVING';
+const CONFIRM = 'CONFIRM';
+const DELETING = 'DELETING';
+const EDIT = 'EDIT';
+const ERROR_SAVE = 'ERROR_SAVE';
+const ERROR_DELETE = 'ERROR_DELETE';
 
 // Returns the appropriate appointment based on the current mode
 export default function Appointment(props) {
@@ -42,12 +42,13 @@ export default function Appointment(props) {
 
     const interview = {
       student: name,
-      interviewer
+      interviewer,
     };
     // show status when saving the appointment
     transition(SAVING);
     // transition to the Show component on a successful save or to the Error component if there is an error while saving
-    props.bookInterview(props.id, interview)
+    props
+      .bookInterview(props.id, interview)
       .then(() => {
         transition(SHOW);
       })
@@ -61,7 +62,8 @@ export default function Appointment(props) {
     // show status component when deleting an appointment
     transition(DELETING, true);
     // transition to the Empty component on a successful deletion or to the Error component if there is an error while deleting
-    props.cancelInterview(props.id)
+    props
+      .cancelInterview(props.id)
       .then(() => {
         transition(EMPTY);
       })
@@ -70,12 +72,12 @@ export default function Appointment(props) {
       });
   }
 
-  return(
-    <article className="appointment">
+  return (
+    <article className='appointment' data-testid='appointment'>
       <Header time={props.time} />
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
       {mode === SHOW && (
-        <Show 
+        <Show
           student={props.interview.student}
           interviewer={props.interview.interviewer}
           onDelete={() => transition(CONFIRM)}
@@ -83,7 +85,7 @@ export default function Appointment(props) {
         />
       )}
       {mode === CREATE && (
-        <Form 
+        <Form
           interviewers={props.interviewers}
           onSave={save}
           onCancel={() => back()}
@@ -92,7 +94,9 @@ export default function Appointment(props) {
       {mode === EDIT && (
         <Form
           student={props.interview.student}
-          interviewer={props.interview.interviewer ? props.interview.interviewer.id : null}
+          interviewer={
+            props.interview.interviewer ? props.interview.interviewer.id : null
+          }
           interviewers={props.interviewers}
           onSave={save}
           onCancel={() => back()}
@@ -104,7 +108,7 @@ export default function Appointment(props) {
       {mode === DELETING && <Status message={DELETING} />}
       {mode === CONFIRM && (
         <Confirm
-          message="Are you sure you would like to delete?"
+          message='Are you sure you would like to delete?'
           onConfirm={deleteAppointment}
           onCancel={() => back()}
         />

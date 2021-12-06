@@ -5,29 +5,58 @@ import {
   cleanup,
   waitForElement,
   fireEvent,
+  getByText,
+  getAllByTestId,
+  getByAltText,
+  getByPlaceholderText,
+  prettyDOM,
 } from '@testing-library/react';
 
 import Application from 'components/Application';
 
 afterEach(cleanup);
 
-/* Promises Example*/
-xit('defaults to Monday and changes the schedule when a new day is selected', () => {
-  const { getByText } = render(<Application />);
+describe('Application', () => {
+  /* Promises Example*/
+  xit('defaults to Monday and changes the schedule when a new day is selected', () => {
+    const { getByText } = render(<Application />);
 
-  return waitForElement(() => getByText('Monday')).then(() => {
+    return waitForElement(() => getByText('Monday')).then(() => {
+      fireEvent.click(getByText('Tuesday'));
+      expect(getByText('Leopold Silvers')).toBeInTheDocument();
+    });
+  });
+
+  /* async/await Example */
+  it('defaults to Monday and changes the schedule when a new day is selected', async () => {
+    const { getByText } = render(<Application />);
+
+    await waitForElement(() => getByText('Monday'));
+
     fireEvent.click(getByText('Tuesday'));
+
     expect(getByText('Leopold Silvers')).toBeInTheDocument();
   });
-});
 
-/* async/await Example */
-it('defaults to Monday and changes the schedule when a new day is selected', async () => {
-  const { getByText } = render(<Application />);
+  it('loads data, books an interview and reduces the spots remaining for the first day by 1', async () => {
+    const { container } = render(<Application />);
 
-  await waitForElement(() => getByText('Monday'));
+    await waitForElement(() => getByText(container, 'Archie Cohen'));
 
-  fireEvent.click(getByText('Tuesday'));
+    // get all appointment articles
+    const appointments = getAllByTestId(container, 'appointment');
+    // grab the first appointment article which happens to be an empty appointment from the mock data
+    const appointment = appointments[0];
+    console.log(prettyDOM(appointment));
 
-  expect(getByText('Leopold Silvers')).toBeInTheDocument();
+    fireEvent.click(getByAltText(appointment, 'Add'));
+
+    fireEvent.change(getByPlaceholderText(appointment, /enter student name/i), {
+      target: { value: 'Lydia Miller-Jones' },
+    });
+    fireEvent.click(getByAltText(appointment, 'Sylvia Palmer'));
+    fireEvent.click(getByText(appointment, 'Save'));
+
+    console.log(prettyDOM(appointment));
+  });
 });
