@@ -9,7 +9,7 @@ import {
   getAllByTestId,
   getByAltText,
   getByPlaceholderText,
-  prettyDOM,
+  queryByText,
 } from '@testing-library/react';
 
 import Application from 'components/Application';
@@ -47,7 +47,6 @@ describe('Application', () => {
     const appointments = getAllByTestId(container, 'appointment');
     // grab the first appointment article which happens to be an empty appointment from the mock data
     const appointment = appointments[0];
-    console.log(prettyDOM(appointment));
 
     fireEvent.click(getByAltText(appointment, 'Add'));
 
@@ -57,6 +56,14 @@ describe('Application', () => {
     fireEvent.click(getByAltText(appointment, 'Sylvia Palmer'));
     fireEvent.click(getByText(appointment, 'Save'));
 
-    console.log(prettyDOM(appointment));
+    expect(getByText(appointment, 'SAVING')).toBeInTheDocument();
+
+    await waitForElement(() => getByText(appointment, 'Lydia Miller-Jones'));
+
+    const day = getAllByTestId(container, 'day').find(day =>
+      queryByText(day, 'Monday')
+    );
+
+    expect(getByText(day, /no spots remaining/i)).toBeInTheDocument();
   });
 });

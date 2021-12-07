@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 
-import DayListItem from "./DayListItem";
+import DayListItem from './DayListItem';
 
 // Returns a DayListItem component for each day in the props.days array
 export default function DayList(props) {
-  const displayDays = props.days.map((day) => {
-    return(
+  const displayDays = props.days.map(day => {
+    return (
       <DayListItem
         key={day.id}
         name={day.name}
@@ -16,9 +16,5 @@ export default function DayList(props) {
     );
   });
 
-  return(
-    <ul>
-      {displayDays}
-    </ul>
-  );
+  return <ul>{displayDays}</ul>;
 }
