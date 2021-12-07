@@ -35,11 +35,6 @@ export default function Appointment(props) {
   // saves the appointment
   function save(name, interviewer) {
     // if a name wasn't entered or an interviewer wasn't selected, transition to Error Page
-    if (!name || !interviewer) {
-      transition(ERROR_SAVE);
-      return;
-    }
-
     const interview = {
       student: name,
       interviewer,
