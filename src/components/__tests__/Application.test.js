@@ -10,7 +10,6 @@ import {
   getByAltText,
   getByPlaceholderText,
   queryByText,
-  prettyDOM,
   getByDisplayValue,
 } from '@testing-library/react';
 
